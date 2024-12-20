@@ -1,4 +1,5 @@
----
+# testdata/only_warnings.yaml
+#   1:1       warning  missing document start "---"  (document-start)
 list:
   - item1
   - item2
