@@ -29,10 +29,18 @@ runs:
             <(yamllint --list-files . | sed 's|^\./||' | sort || kill $$) \
             | tr '\n' ' '
         )
+        if [ -z "${CHANGED_FILES}" ]; then
+          echo "No changed YAML files, skipping lint."
+          exit 0
+        fi
         echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
       shell: bash
     - name: Lint YAML files
-      shell: bash
       run: |
-        readarray -t CHANGED_FILES < <(echo ${{ env.CHANGED_FILES }} | tr ' ' '\n')
-        yamllint ${{ inputs.yamllint_flags }} "${CHANGED_FILES[@]}"
+        if [ -z "${{ env.CHANGED_FILES }}" ]; then
+          yamllint ${{ inputs.yamllint_flags }}
+        else
+          readarray -t CHANGED_FILES < <(echo ${{ env.CHANGED_FILES }} | tr ' ' '\n')
+          yamllint ${{ inputs.yamllint_flags }} "${CHANGED_FILES[@]}"
+        fi
+      shell: bash
