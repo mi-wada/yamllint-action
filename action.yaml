@@ -6,6 +6,10 @@ inputs:
     description: "Flags to pass to yamllint"
     required: false
     default: ""
+  only_changed:
+    description: "Lint only changed(added/modified) files"
+    required: false
+    default: "true"
 runs:
   using: "composite"
   steps:
@@ -14,7 +18,21 @@ runs:
       shell: bash
       run: |
         pip install yamllint
+    - name: Get changed files
+      if: ${{ inputs.only_changed == 'true' && github.base_ref != null }}
+      run: |
+        git fetch --depth 1 origin ${{ github.base_ref }}
+
+        CHANGED_FILES=$(
+          comm -12 \
+            <(git diff --diff-filter=d --name-only origin/${{ github.base_ref }} | sort || kill $$) \
+            <(yamllint --list-files . | sed 's|^\./||' | sort || kill $$) \
+            | tr '\n' ' '
+        )
+        echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
+      shell: bash
     - name: Lint YAML files
       shell: bash
       run: |
-        yamllint ${{ inputs.yamllint_flags }}
+        readarray -t CHANGED_FILES < <(echo ${{ env.CHANGED_FILES }} | tr ' ' '\n')
+        yamllint ${{ inputs.yamllint_flags }} "${CHANGED_FILES[@]}"

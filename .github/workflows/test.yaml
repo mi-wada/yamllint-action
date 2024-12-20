@@ -19,4 +19,5 @@ jobs:
       - name: Lint YAML files
         uses: ./
         with:
-          yamllint_flags: ./testdata
+          # yamllint_flags: ./testdata
+          only_changed: true
