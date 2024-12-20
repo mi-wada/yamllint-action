@@ -17,4 +17,4 @@ runs:
     - name: Lint YAML files
       shell: bash
       run: |
-        yamllint .
+        yamllint ${{ inputs.yamllint_flags }}
