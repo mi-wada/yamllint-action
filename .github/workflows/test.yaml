@@ -17,6 +17,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Lint YAML files
-        uses: .
+        uses: ./
         with:
           yamllint_flags: ./testdata
