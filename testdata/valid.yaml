@@ -8,4 +8,4 @@ nested:
 bool: true
 null: null
 number: 123
-string: "This is a string"
+string:          "This is a string"
