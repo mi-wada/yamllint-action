@@ -9,7 +9,7 @@ inputs:
   only_changed:
     description: "Lint only changed(added/modified) files"
     required: false
-    default: "true"
+    default: "false"
 runs:
   using: "composite"
   steps:
