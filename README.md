@@ -1,6 +1,6 @@
 # yamllint-action
 
-GitHub Actions to execute [yamllint](https://github.com/adrienverge/yamllint).
+GitHub Actions for running [yamllint](https://github.com/adrienverge/yamllint). This action supports linting only the YAML files that have changed in a pull request.
 
 ## Usage
 
