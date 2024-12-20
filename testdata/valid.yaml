@@ -1,0 +1,10 @@
+list:
+  - item1
+  - item2
+nested:
+  key1: value1
+  key2: value2
+bool: true
+null: null
+number: 123
+string: "This is a string"
