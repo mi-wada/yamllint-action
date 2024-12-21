@@ -24,3 +24,5 @@ jobs:
         with:
           # yamllint_flags: ./testdata
           only_changed: true
+          level: info
+          fail_level: none
