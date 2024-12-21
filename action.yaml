@@ -2,6 +2,9 @@ name: Run yamllint with reviewdog GitHub Action
 description: |
   This Action runs yamllint with reviewdog. Supports a feature to run only on changed files.
 author: "Mitsuaki Wada"
+branding:
+  icon: "check-circle"
+  color: "blue"
 inputs:
   yamllint_flags:
     description: "Flags and args of yamllint command."
