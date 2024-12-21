@@ -65,6 +65,9 @@ runs:
       shell: bash
     - name: Lint YAML files
       run: |
+        # Disable `pipefail` to respect the reviewdog `fail-level` option.
+        set +o pipefail
+
         export REVIEWDOG_GITHUB_API_TOKEN=${{ inputs.github_token }}
 
         if [ -z "${{ env.CHANGED_FILES }}" ]; then
