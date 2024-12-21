@@ -1,4 +1,4 @@
-name: yamllint with reviewdog
+name: Run yamllint with reviewdog GitHub Action
 description: |
   This Action runs yamllint with reviewdog. Supports a feature to run only on changed files.
 author: "Mitsuaki Wada"
