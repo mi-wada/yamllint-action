@@ -81,8 +81,8 @@ runs:
               -fail-level="${{ inputs.fail_level }}" \
               ${{ inputs.reviewdog_flags }}
         else
-          readarray -t CHANGED_FILES < <(echo ${{ env.CHANGED_FILES }} | tr ' ' '\n')
-          yamllint --format "parsable" ${{ inputs.yamllint_flags }} "${CHANGED_FILES[@]}" |
+          echo ${{ env.CHANGED_FILES }} |
+            xargs yamllint --format "parsable" ${{ inputs.yamllint_flags }} |
             reviewdog \
               -efm="%f:%l:%c: %m" \
               -name "yamllint" \
