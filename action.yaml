@@ -10,9 +10,37 @@ inputs:
     description: "Lint only changed(added/modified) files"
     required: false
     default: "false"
+  github_token:
+    description: "GITHUB_TOKEN."
+    default: "${{ github.token }}"
+  level:
+    description: "Report level for reviewdog [info,warning,error]"
+    default: "error"
+  reporter:
+    description: |
+      Reporter of reviewdog command [github-pr-check,github-pr-review,github-check].
+      Default is github-pr-check.
+      github-pr-review can use Markdown and add a link to rule page in reviewdog reports.
+    default: "github-pr-check"
+  filter_mode:
+    description: |
+      Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
+      Default is added.
+    default: "added"
+  fail_level:
+    description: |
+      If set to `none`, always use exit code 0 for reviewdog.
+      Otherwise, exit code 1 for reviewdog if it finds at least 1 issue with severity greater than or equal to the given level.
+      Possible values: [none,any,info,warning,error]
+      Default is `none`.
+    default: 'none'
+  reviewdog_flags:
+    description: "Additional reviewdog flags"
+    default: ""
 runs:
   using: "composite"
   steps:
+    - uses: reviewdog/action-setup@v1
     - uses: actions/setup-python@v5
     - name: Install yamllint
       shell: bash
@@ -20,6 +48,7 @@ runs:
         pip install yamllint
     - name: Get changed files
       if: ${{ inputs.only_changed == 'true' && github.base_ref != null }}
+      shell: bash
       run: |
         git fetch --depth 1 origin ${{ github.base_ref }}
 
@@ -33,14 +62,35 @@ runs:
           echo "No changed YAML files, skipping lint."
           exit 0
         fi
+        echo "Changed yamllint target files: ${CHANGED_FILES}"
         echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
-      shell: bash
     - name: Lint YAML files
-      run: |
-        if [ -z "${{ env.CHANGED_FILES }}" ]; then
-          yamllint ${{ inputs.yamllint_flags }}
-        else
-          readarray -t CHANGED_FILES < <(echo ${{ env.CHANGED_FILES }} | tr ' ' '\n')
-          yamllint ${{ inputs.yamllint_flags }} "${CHANGED_FILES[@]}"
-        fi
       shell: bash
+      run: |
+        # Disable `pipefail` to respect the reviewdog `fail-level` option.
+        set +o pipefail
+
+        export REVIEWDOG_GITHUB_API_TOKEN=${{ inputs.github_token }}
+
+        if [ -z "${{ env.CHANGED_FILES }}" ]; then
+          yamllint --format "parsable" ${{ inputs.yamllint_flags }} |
+            reviewdog \
+              -efm="%f:%l:%c: %m" \
+              -name "yamllint" \
+              -reporter="${{ inputs.reporter }}" \
+              -level="${{ inputs.level }}" \
+              -filter-mode="${{ inputs.filter_mode }}" \
+              -fail-level="${{ inputs.fail_level }}" \
+              ${{ inputs.reviewdog_flags }}
+        else
+          echo ${{ env.CHANGED_FILES }} |
+            xargs yamllint --format "parsable" ${{ inputs.yamllint_flags }} |
+            reviewdog \
+              -efm="%f:%l:%c: %m" \
+              -name "yamllint" \
+              -reporter="${{ inputs.reporter }}" \
+              -level="${{ inputs.level }}" \
+              -filter-mode="${{ inputs.filter_mode }}" \
+              -fail-level="${{ inputs.fail_level }}" \
+              ${{ inputs.reviewdog_flags }}
+        fi
