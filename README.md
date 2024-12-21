@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: mi-wada/yamllint-action@v1
+      - uses: mi-wada/yamllint-action@v0
         with:
           only_changed: true
 ```
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: mi-wada/yamllint-action@v1
+      - uses: mi-wada/yamllint-action@v0
         with:
           yamllint_flags: .
 ```
@@ -58,7 +58,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: mi-wada/yamllint-action@v1
+      - uses: mi-wada/yamllint-action@0
         with:
           yamllint_flags: ./path/to/directory
 ```
