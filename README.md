@@ -1,6 +1,6 @@
 # yamllint-action
 
-GitHub Actions for running [yamllint](https://github.com/adrienverge/yamllint). This action supports linting only the YAML files that have changed in a pull request.
+GitHub Actions for running [yamllint](https://github.com/adrienverge/yamllint) with [reviewdog](https://github.com/reviewdog/reviewdog?tab=readme-ov-file#installation). This action supports linting only the YAML files that have changed in a pull request.
 
 ## Usage
 
