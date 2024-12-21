@@ -22,7 +22,28 @@ jobs:
       - name: Lint YAML files
         uses: ./
         with:
-          # yamllint_flags: ./testdata
+          yamllint_flags: ./testdata
+          level: info
+          fail_level: none
+  test_only_changed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint YAML files
+        uses: ./
+        with:
           only_changed: true
+          level: info
+          fail_level: none
+  test_all_files:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Lint YAML files
+        uses: ./
+        with:
+          yamllint_flags: .
           level: info
           fail_level: none
