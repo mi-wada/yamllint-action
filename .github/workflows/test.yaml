@@ -42,6 +42,5 @@ jobs:
       - uses: ./
         with:
           yamllint_flags: .
-          filter_mode: nofilter
           level: info
           fail_level: none
