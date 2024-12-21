@@ -105,6 +105,8 @@ It's same as `-reporter` flag of reviewdog.
 
 Optional. Default is `added`. Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
 
+This is used to control the target of the lint result report, not the target of the lint.
+
 ### `fail_level`
 
 Optional. Default is `none`. If set to `none`, always use exit code 0 for reviewdog.
