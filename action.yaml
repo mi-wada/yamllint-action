@@ -1,6 +1,6 @@
-name: yamllint-action
+name: yamllint with reviewdog
 description: |
-  This Action runs yamllint with reviewdog. By setting the `only_changed` flag to true, it allows linting only the YAML files that have been changed in a pull request.
+  This Action runs yamllint with reviewdog. Supports a feature to run only on changed files.
 author: "Mitsuaki Wada"
 inputs:
   yamllint_flags:
