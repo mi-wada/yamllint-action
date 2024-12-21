@@ -62,6 +62,7 @@ runs:
           echo "No changed YAML files, skipping lint."
           exit 0
         fi
+        echo "Changed files: ${CHANGED_FILES}"
         echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
     - name: Lint YAML files
       shell: bash
