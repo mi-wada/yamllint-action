@@ -53,7 +53,7 @@ runs:
         # If `github.base_ref` is null, set CHANGED_FILES to "."
         if [ -z "${{ github.base_ref }}" ]; then
           echo "No base ref, linting all files."
-          CHANGED_FILES="."
+          echo "CHANGED_FILES=." >> $GITHUB_ENV
           exit 0
         fi
 
