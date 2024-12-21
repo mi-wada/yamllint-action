@@ -19,8 +19,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Lint YAML files
-        uses: ./
+      - uses: ./
         with:
           yamllint_flags: ./testdata
           level: info
@@ -30,8 +29,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Lint YAML files
-        uses: ./
+      - uses: ./
         with:
           only_changed: true
           level: info
@@ -41,9 +39,9 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v4
-      - name: Lint YAML files
-        uses: ./
+      - uses: ./
         with:
           yamllint_flags: .
+          filter_mode: nofilter
           level: info
           fail_level: none
