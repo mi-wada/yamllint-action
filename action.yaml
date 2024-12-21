@@ -3,11 +3,11 @@ description: "Lint YAML files using [yamllint](https://github.com/adrienverge/ya
 author: "Mitsuaki Wada"
 inputs:
   yamllint_flags:
-    description: "Flags to pass to yamllint"
+    description: "Flags and args of yamllint command."
     required: false
     default: ""
   only_changed:
-    description: "Lint only changed(added/modified) files"
+    description: "If true, lint only changed(added/modified) files in a pull request."
     required: false
     default: "false"
   github_token:
@@ -47,9 +47,16 @@ runs:
       run: |
         pip install yamllint
     - name: Get changed files
-      if: ${{ inputs.only_changed == 'true' && github.base_ref != null }}
+      if: ${{ inputs.only_changed == 'true' }}
       shell: bash
       run: |
+        # If `github.base_ref` is null, set CHANGED_FILES to "."
+        if [ -z "${{ github.base_ref }}" ]; then
+          echo "No base ref, linting all files."
+          CHANGED_FILES="."
+          exit 0
+        fi
+
         git fetch --depth 1 origin ${{ github.base_ref }}
 
         CHANGED_FILES=$(
