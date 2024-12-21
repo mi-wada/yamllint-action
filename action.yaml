@@ -65,15 +65,16 @@ runs:
             <(yamllint --list-files . | sed 's|^\./||' | sort || kill $$) \
             | tr '\n' ' '
         )
-        if [ -z "${CHANGED_FILES}" ]; then
-          echo "No changed YAML files, skipping lint."
-          exit 0
-        fi
         echo "Changed yamllint target files: ${CHANGED_FILES}"
         echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
     - name: Lint YAML files
       shell: bash
       run: |
+        if [ ${{ inputs.only_changed }} == 'true' ] && [ -z "${{ env.CHANGED_FILES }}" ]; then
+          echo "No changed YAML files, skipping lint."
+          exit 0
+        fi
+
         # Disable `pipefail` to respect the reviewdog `fail-level` option.
         set +o pipefail
 
