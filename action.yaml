@@ -48,6 +48,7 @@ runs:
         pip install yamllint
     - name: Get changed files
       if: ${{ inputs.only_changed == 'true' && github.base_ref != null }}
+      shell: bash
       run: |
         git fetch --depth 1 origin ${{ github.base_ref }}
 
@@ -62,8 +63,8 @@ runs:
           exit 0
         fi
         echo "CHANGED_FILES=${CHANGED_FILES}" >> $GITHUB_ENV
-      shell: bash
     - name: Lint YAML files
+      shell: bash
       run: |
         # Disable `pipefail` to respect the reviewdog `fail-level` option.
         set +o pipefail
@@ -92,4 +93,3 @@ runs:
               -fail-level="${{ inputs.fail_level }}" \
               ${{ inputs.reviewdog_flags }}
         fi
-      shell: bash
